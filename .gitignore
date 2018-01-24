@@ -1,0 +1,7 @@
+target
+bin
+.metadata
+.DS_Store
+xcuserdata
+build
+

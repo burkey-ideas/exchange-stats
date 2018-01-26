@@ -30,7 +30,7 @@
     wpa_cli -i wlan0 reconfigure
 ```
 
-*  Install Java
+*  Install Oracle Java 8
 ```
     sudo apt-get install oracle-java8-jdk -y
 ```
@@ -49,5 +49,12 @@
 
 *  Run
 ```
-    java -jar exchange-stats-1.0.0.jar > exchange-stats.log 2>&1 &
+    java -jar exchange-stats-1.0.0.jar >> exchange-stats.log 2>&1 &
+```
+
+*  Shutdown
+```
+    ps -eaf | grep java
+    kill -SIGTERM PID
+    sudo shutdown -h now
 ```

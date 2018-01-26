@@ -66,7 +66,7 @@ public class CurrencyApiJob implements Runnable
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = format.format(timestamp);
 
-            System.out.println("Exchnage Rate date: " + formattedDate);
+            System.out.println("Exchange Rate date: " + formattedDate);
             System.out.println("Exchange Rate source currency: " + sourceCurrency);
 
             JsonObject exchangeRateList = exchangeRateResult.getJsonObject("quotes");
@@ -91,7 +91,7 @@ public class CurrencyApiJob implements Runnable
                 }
             }
 
-            System.out.println("Exchnage Rate list size: " + exchangeRateMap.size());
+            System.out.println("Exchange Rate list size: " + exchangeRateMap.size());
 
             boolean append = new File(currencyFile).exists();
             try (CSVWriter writer = new CSVWriter(new FileWriter(currencyFile, append)))

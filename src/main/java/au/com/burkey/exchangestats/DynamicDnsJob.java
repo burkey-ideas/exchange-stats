@@ -13,8 +13,8 @@ public class DynamicDnsJob implements Runnable
     {
         System.out.println("Running: " + this.getClass().getSimpleName());
 
-        final String ipifyApiUrl = "http://api.ipify.org?format=json";
-        final String dtdnsUrl = "http://www.dtdns.com/api/autodns.cfm?id=%s&pw=%s&ip=%s";
+        final String ipifyApiUrl = "https://api.ipify.org?format=json";
+        final String dtdnsUrl = "https://www.dtdns.com/api/autodns.cfm?id=%s&pw=%s&ip=%s";
 
         try
         {

@@ -17,6 +17,7 @@ public class UrlUtil
 {
     public static JsonObject getJsonUrl(final String url, final Object... args) throws IOException
     {
+        System.out.println("URL connection: " + url);
         HttpURLConnection conn = (HttpURLConnection) new URL(String.format(url, args)).openConnection();
 
         int responseCode = conn.getResponseCode();
@@ -46,6 +47,8 @@ public class UrlUtil
 
     public static String getTextUrl(final String url, final Object... args) throws IOException
     {
+        System.out.println("URL connection: " + url);
+
         HttpURLConnection conn = (HttpURLConnection) new URL(String.format(url, args)).openConnection();
 
         int responseCode = conn.getResponseCode();

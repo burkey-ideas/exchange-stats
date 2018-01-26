@@ -1,5 +1,11 @@
 package au.com.burkey.exchangestats;
 
+import java.security.SecureRandom;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.plus.webapp.PlusConfiguration;
@@ -15,6 +21,10 @@ public class EmbeddedWebServer
 {
     public static void main(final String[] args) throws Exception
     {
+        SSLContext ctx = SSLContext.getInstance("TLS");
+        ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()}, new SecureRandom());
+        SSLContext.setDefault(ctx);
+
         //
         // http://www.eclipse.org/jetty/documentation/9.4.x/embedded-examples.html
         //

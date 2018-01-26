@@ -16,10 +16,19 @@ public class BackgroundJobManager implements ServletContextListener
     @Override
     public void contextInitialized(final ServletContextEvent event)
     {
+        System.out.println("Starting scheduler.");
+
         scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        scheduler.scheduleAtFixedRate(new CurrencyApiJob(), 0, 1, TimeUnit.HOURS);
-        scheduler.scheduleAtFixedRate(new DynamicDnsJob(), 0, 15, TimeUnit.MINUTES);
+        if (Boolean.valueOf(PropertyUtil.getProperties().getProperty("dns.enabled")))
+        {
+            scheduler.scheduleAtFixedRate(new CurrencyApiJob(), 0, 1, TimeUnit.HOURS);
+        }
+
+        if (Boolean.valueOf(PropertyUtil.getProperties().getProperty("currency.enabled")))
+        {
+            scheduler.scheduleAtFixedRate(new DynamicDnsJob(), 0, 15, TimeUnit.MINUTES);
+        }
     }
 
     @Override

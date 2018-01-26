@@ -29,7 +29,7 @@ public class EmbeddedWebServer
         // http://www.eclipse.org/jetty/documentation/9.4.x/embedded-examples.html
         //
 
-        int port = Integer.valueOf(PropertyUtil.getProperties().getProperty("server.port"));
+        int port = Integer.valueOf(PropertyUtil.getProperties().getProperty("server.port", "8080"));
 
         Server server = new Server(port);
 

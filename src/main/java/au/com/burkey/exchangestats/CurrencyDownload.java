@@ -1,5 +1,6 @@
 package au.com.burkey.exchangestats;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,24 +31,34 @@ public class CurrencyDownload extends HttpServlet
     @Override
     public void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
     {
-        String currencyFile = PropertyUtil.getProperties().getProperty("currency.file");
+        String currencyPath = PropertyUtil.getProperties().getProperty("currency.file");
 
-        try (InputStream inputStream = new FileInputStream(currencyFile))
+        File currencyFile = currencyPath != null ? new File(currencyPath) : null;
+
+        if (currencyFile != null && currencyFile.exists() && currencyFile.isFile())
         {
-            response.setContentType("text/csv");
-            response.addHeader("Content-Type", "application/octet-stream");
-            response.addHeader("Content-Disposition", "attachment; filename=" + currencyFile);
-
-            ServletOutputStream outputStream = response.getOutputStream();
-
-            byte[] buf = new byte[8192];
-            int len;
-            while((len = inputStream.read(buf)) > 0)
+            try (InputStream inputStream = new FileInputStream(currencyFile))
             {
-                outputStream.write(buf, 0, len);
+                response.setContentType("text/csv");
+                response.addHeader("Content-Type", "application/octet-stream");
+                response.addHeader("Content-Disposition", "attachment; filename=" + currencyFile.getName());
+
+                ServletOutputStream outputStream = response.getOutputStream();
+
+                byte[] buf = new byte[8192];
+                int len;
+                while((len = inputStream.read(buf)) > 0)
+                {
+                    outputStream.write(buf, 0, len);
+                }
+
+                outputStream.flush();
             }
 
-            outputStream.flush();
+        }
+        else
+        {
+            throw new ServletException("Missing currency file.");
         }
     }
 }

@@ -77,9 +77,6 @@
 #d-wrapper  div.sep li {
     color: #bc2207;
     font-size: 1em;
-    display: list-item;
-    list-style-type: disc;
-    list-style-position: inside;
 }
 
 #d-wrapper  h2,

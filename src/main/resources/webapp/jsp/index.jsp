@@ -23,7 +23,8 @@
             
         <div class="sep">
             <ul>
-                <l1><a href="/currency">Currency Exchange Rates CSV</a></li>
+                <li><a href="/currency">Currency Exchange Rates CSV</a></li>
+                <li><a href="https://github.com/burkey-ideas/exchange-stats">GitHub Source</a></li>
             </ul>
         </div>
         

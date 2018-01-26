@@ -1,0 +1,128 @@
+/* See https://codepen.io/AndreiDodu/pen/gziqn */
+
+#d-wrapper {
+    background-color: #fff;
+}
+#d-wrapper * {
+    margin:0;
+    padding:0;
+}
+
+#d-wrapper  div.sep {
+    /* min-height: 200px; */
+    padding: 32px 0;
+}
+
+#d-wrapper  .zig-zag-top:before {
+    background:
+        linear-gradient(-45deg, #f4b342 16px, red 16px, blue 16px, transparent 0),
+        linear-gradient(45deg, #f4b342 16px, transparent 0);
+    background-position: left top;
+    background-repeat: repeat-x;
+    background-size: 22px 32px;
+    content: " ";
+    display: block;
+
+    height: 32px;
+    width: 100%;
+
+    position: relative;
+    bottom: 64px;
+    left:0;
+}
+
+#d-wrapper  div > * {
+    margin: 0 40px;
+}
+
+#d-wrapper  .zig-zag-bottom {
+    margin: 32px 0;
+    margin-top: 0;
+    background: #f4b342;
+}
+
+#d-wrapper  .zig-zag-top {
+    margin: 32px 0;
+    margin-bottom: 0;
+    background: #f4b342;
+}
+
+#d-wrapper  .zig-zag-bottom,
+#d-wrapper  .zig-zag-top {
+    padding: 32px 0;
+}
+
+#d-wrapper  ul,
+#d-wrapper  li,
+#d-wrapper  h2,
+#d-wrapper  h1 {
+    font-size:2em;
+    color:#fffed1;
+    font-family:"PT Sans Narrow", "Fjalla One", sans-serif;
+    font-weight:900;
+}
+
+#d-wrapper  div.sep h2,
+#d-wrapper  div.sep h1 {
+    color: #f4b342;
+}
+
+#d-wrapper  div.sep a {
+    color: #bc2207;
+}
+
+#d-wrapper  ul,
+#d-wrapper  li,
+#d-wrapper  div.sep ul,
+#d-wrapper  div.sep li {
+    color: #bc2207;
+    font-size: 1em;
+    display: list-item;
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+#d-wrapper  h2,
+#d-wrapper  h1 {
+    text-shadow:1px 1px 0 #bc2207, 2px 2px 0 #bc2207, 3px 3px 0 #bc2207, 4px 4px 0 #bc2207, 5px 5px 0 #bc2207;
+    text-align:center;
+}
+
+#d-wrapper  h1 {
+    font-size:4em;
+}
+
+#d-wrapper  .zig-zag-bottom:after {
+    background:
+        linear-gradient(-45deg, transparent 16px, #f4b342 0),
+        linear-gradient(45deg, transparent 16px, #f4b342 0);
+    background-repeat: repeat-x;
+    background-position: left bottom;
+    background-size: 22px 32px;
+    content: "";
+    display: block;
+
+    width: 100%;
+    height: 32px;
+
+    position: relative;
+    top:64px;
+    left:0px;
+}
+
+#d-wrapper  h2 {
+    text-align: center;
+}
+
+#d-wrapper  h2:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+.auth {
+    text-decoration: overline;
+    color: #999;
+    font-size: 2em;
+}

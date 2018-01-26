@@ -1,7 +1,11 @@
 target
 bin
 .metadata
+.classpath
+.project
+.settings
 .DS_Store
 xcuserdata
 build
-
+currency.csv
+exchange-stats.properties

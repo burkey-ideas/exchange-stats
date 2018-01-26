@@ -2,10 +2,10 @@
 # Installation on Raspberry Pi
 
 * Install Raspberry Pi operating system
-** https://www.raspberrypi.org/documentation/installation/installing-images/
+  * https://www.raspberrypi.org/documentation/installation/installing-images/
 
 * Enable SSH
-** https://www.raspberrypi.org/documentation/remote-access/ssh/
+  * https://www.raspberrypi.org/documentation/remote-access/ssh/
 
 * Build
 ```

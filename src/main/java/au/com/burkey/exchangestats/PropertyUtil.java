@@ -9,7 +9,7 @@ public class PropertyUtil
 {
     private static Properties properties;
 
-    public static Properties getProperties()
+    public static synchronized Properties getProperties()
     {
         try
         {

@@ -35,6 +35,12 @@
     sudo apt-get install oracle-java8-jdk -y
 ```
 
+*  Change Timezone and Locale (Internationalization Options)
+    *  https://www.raspberrypi.org/documentation/configuration/raspi-config.md
+```
+    sudo raspi-config
+```
+
 *  Build
 ```
     mvn clean package

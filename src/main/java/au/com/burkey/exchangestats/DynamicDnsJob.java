@@ -6,6 +6,8 @@ import java.util.Calendar;
 
 import javax.json.JsonObject;
 
+import org.eclipse.jetty.util.security.Credential;
+
 public class DynamicDnsJob implements Runnable
 {
     @Override
@@ -20,6 +22,8 @@ public class DynamicDnsJob implements Runnable
         {
             String hostname = PropertyUtil.getProperties().getProperty("dns.hostname");
             String password = PropertyUtil.getProperties().getProperty("dns.password");
+
+            password = Credential.getCredential(password).toString();
 
             JsonObject ipifyResult = UrlUtil.getJsonUrl(ipifyApiUrl);
 

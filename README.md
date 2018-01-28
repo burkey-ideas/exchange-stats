@@ -53,6 +53,16 @@
     scp example-exchange-stats.properties pi@192.168.1.1:~/exchange-stats.properties
 ```
 
+*  Obfuscate Passwords for Currency API Access Key and DNS Password
+```
+    java -cp exchange-stats-1.0.0.jar org.eclipse.jetty.util.security.Password [password]
+```
+
+*  Configure Properties File and set the Obfuscated Currency API Access Key and DNS Password
+```
+    vi exchange-stats.properties
+```
+
 *  Run
 ```
     java -jar exchange-stats-1.0.0.jar >> exchange-stats.log 2>&1 &
@@ -61,6 +71,6 @@
 *  Shutdown
 ```
     ps -eaf | grep java
-    kill -SIGTERM PID
+    kill -SIGTERM [PID]
     sudo shutdown -h now
 ```

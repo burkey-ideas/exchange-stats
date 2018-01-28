@@ -13,6 +13,8 @@ import java.util.TreeMap;
 
 import javax.json.JsonObject;
 
+import org.eclipse.jetty.util.security.Credential;
+
 import com.opencsv.CSVWriter;
 
 public class CurrencyApiJob implements Runnable
@@ -34,6 +36,8 @@ public class CurrencyApiJob implements Runnable
         {
             String accessKey = PropertyUtil.getProperties().getProperty("currency.accessKey");
             String currencyFile = PropertyUtil.getProperties().getProperty("currency.file");
+
+            accessKey = Credential.getCredential(accessKey).toString();
 
             if (currencyMap.isEmpty())
             {

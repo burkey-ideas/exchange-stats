@@ -48,29 +48,38 @@
 
 *  Deploy
 ```
-    scp exchange-stats-1.0.0.jar pi@192.168.1.1:~
-    scp -r lib pi@192.168.1.1:~/lib
+    scp target/exchange-stats-1.0.0.jar pi@192.168.1.1:~/exchange-stats.jar
+    scp -r target/lib pi@192.168.1.1:~/lib
     scp example-exchange-stats.properties pi@192.168.1.1:~/exchange-stats.properties
+    scp src/main/scripts/exchange-stats.sh pi@192.168.1.1:~
+    
+    sudo mv exchange-stats.sh /etc/init.d/exchange-stats.sh
+    sudo chmod 755 /etc/init.d/exchange-stats.sh
 ```
 
-*  Obfuscate Passwords for Currency API Access Key and DNS Password
+*  Obfuscate Passwords for Currency API Access Key and Dynamic DNS Password
 ```
-    java -cp exchange-stats-1.0.0.jar org.eclipse.jetty.util.security.Password [password]
+    java -cp exchange-stats.jar org.eclipse.jetty.util.security.Password [password]
 ```
 
-*  Configure Properties File and set the Obfuscated Currency API Access Key and DNS Password
+*  Configure Properties File
 ```
     vi exchange-stats.properties
 ```
 
-*  Run
+*  Run (either)
 ```
-    java -jar exchange-stats-1.0.0.jar >> exchange-stats.log 2>&1 &
+    java -jar exchange-stats.jar
+    sudo /etc/init.d/exchange-stats.sh start
+```
+
+*  Register for Start Up
+```
+    sudo update-rc.d exchange-stats.sh defaults
 ```
 
 *  Shutdown
 ```
-    ps -eaf | grep java
-    kill -SIGTERM [PID]
+    sudo /etc/init.d/exchange-stats.sh stop
     sudo shutdown -h now
 ```

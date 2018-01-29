@@ -14,6 +14,8 @@ import java.util.TreeMap;
 import javax.json.JsonObject;
 
 import org.eclipse.jetty.util.security.Credential;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opencsv.CSVWriter;
 
@@ -21,10 +23,12 @@ public class CurrencyApiJob implements Runnable
 {
     private static final Map<String, String> currencyMap = new TreeMap<String, String>();
 
+    private static final Logger log = LoggerFactory.getLogger(CurrencyApiJob.class);
+
     @Override
     public void run()
     {
-        System.out.println("Running: " + this.getClass().getSimpleName());
+        log.info("Running: " + this.getClass().getSimpleName());
 
         final String currencyListApiUrl = "http://apilayer.net/api/list?access_key=%s";
         final String exchangeRateApiUrl = "http://apilayer.net/api/live?access_key=%s&currencies=%s";
@@ -41,7 +45,7 @@ public class CurrencyApiJob implements Runnable
 
             if (currencyMap.isEmpty())
             {
-                System.out.println("Retrieving currency list.");
+                log.info("Retrieving currency list.");
 
                 //JsonObject currencyListResult = Json.createReader(new StringReader(exampleCurrencyListResult)).readObject();
                 JsonObject currencyListResult = UrlUtil.getJsonUrl(currencyListApiUrl, accessKey);
@@ -54,12 +58,12 @@ public class CurrencyApiJob implements Runnable
                     currencyMap.put(currencyKey, currencyList.getString(currencyKey));
                 }
 
-                System.out.println("Currency list size: " + currencyMap.size());
+                log.info("Currency list size: " + currencyMap.size());
 
-                System.out.println("Currency list: " + UrlUtil.toStringKeys(currencyMap));
+                log.info("Currency list: " + UrlUtil.toStringKeys(currencyMap));
             }
 
-            System.out.println("Retrieving exchange rates.");
+            log.info("Retrieving exchange rates.");
 
             //JsonObject exchangeRateResult = Json.createReader(new StringReader(exampleExchangeRateResult)).readObject();
             JsonObject exchangeRateResult = UrlUtil.getJsonUrl(exchangeRateApiUrl, accessKey, UrlUtil.toStringKeys(currencyMap));
@@ -70,8 +74,8 @@ public class CurrencyApiJob implements Runnable
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = format.format(timestamp);
 
-            System.out.println("Exchange Rate date: " + formattedDate);
-            System.out.println("Exchange Rate source currency: " + sourceCurrency);
+            log.info("Exchange Rate date: " + formattedDate);
+            log.info("Exchange Rate source currency: " + sourceCurrency);
 
             JsonObject exchangeRateList = exchangeRateResult.getJsonObject("quotes");
 
@@ -95,18 +99,18 @@ public class CurrencyApiJob implements Runnable
                 }
             }
 
-            System.out.println("Exchange Rate list size: " + exchangeRateMap.size());
+            log.info("Exchange Rate list size: " + exchangeRateMap.size());
 
             boolean append = new File(currencyFile).exists();
             try (CSVWriter writer = new CSVWriter(new FileWriter(currencyFile, append)))
             {
                 if (append)
                 {
-                    System.out.println("Previous currency file detected, not writing header row.");
+                    log.info("Previous currency file detected, not writing header row.");
                 }
                 else
                 {
-                    System.out.println("Previous currency file not detected, writing header row.");
+                    log.info("Previous currency file not detected, writing header row.");
 
                     List<String> header = new ArrayList<String>();
                     header.add("Date");
@@ -116,7 +120,7 @@ public class CurrencyApiJob implements Runnable
                     writer.writeNext(header.toArray(new String[header.size()]));
                 }
 
-                System.out.println("Writing data row.");
+                log.info("Writing data row.");
 
                 List<String> data = new ArrayList<String>();
                 data.add(formattedDate);
@@ -126,17 +130,17 @@ public class CurrencyApiJob implements Runnable
                 writer.writeNext(data.toArray(new String[data.size()]));
             }
 
-            System.out.println("Currency file written.");
+            log.info("Currency file written.");
         }
         catch (WebException ex)
         {
-            System.err.println("Unable to examine Currency. " + ex.getMessage());
-            System.err.println("Response Code: " + ex.getResponseCode());
-            System.err.println("Response Text: " + ex.getResponseText());
+            log.error("Unable to examine Currency. " + ex.getMessage());
+            log.error("Response Code: " + ex.getResponseCode());
+            log.error("Response Text: " + ex.getResponseText());
         }
         catch (IOException ex)
         {
-            System.err.println("Unable to examine Currency. " + ex.getMessage());
+            log.error("Unable to examine Currency. " + ex.getMessage());
             ex.printStackTrace();
         }
     }

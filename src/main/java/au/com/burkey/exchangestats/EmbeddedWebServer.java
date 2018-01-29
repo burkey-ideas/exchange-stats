@@ -46,7 +46,7 @@ public class EmbeddedWebServer
         });
 
         context.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
-                ".*/exchange-stats-.*\\.jar$|.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$|.*/classes/.*");
+                ".*/exchange-stats.*\\.jar$|.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$|.*/classes/.*");
 
         context.setParentLoaderPriority(true);
 

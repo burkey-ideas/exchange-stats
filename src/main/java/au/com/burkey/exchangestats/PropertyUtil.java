@@ -5,9 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PropertyUtil
 {
     private static Properties properties;
+
+    private static final Logger log = LoggerFactory.getLogger(PropertyUtil.class);
 
     public static synchronized Properties getProperties()
     {
@@ -15,7 +20,7 @@ public class PropertyUtil
         {
             if (properties == null)
             {
-                System.out.println("Loading properties.");
+                log.info("Loading properties.");
 
                 try (InputStream stream = new FileInputStream("exchange-stats.properties"))
                 {
@@ -31,7 +36,7 @@ public class PropertyUtil
         }
         catch (IOException ex)
         {
-            System.err.println("Unable to load properties. " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
+            log.error("Unable to load properties. " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
 
             return new Properties();
         }

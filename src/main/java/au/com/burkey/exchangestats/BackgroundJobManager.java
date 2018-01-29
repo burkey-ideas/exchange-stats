@@ -8,15 +8,20 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @WebListener
 public class BackgroundJobManager implements ServletContextListener
 {
     private ScheduledExecutorService scheduler;
 
+    private static final Logger log = LoggerFactory.getLogger(BackgroundJobManager.class);
+
     @Override
     public void contextInitialized(final ServletContextEvent event)
     {
-        System.out.println("Starting scheduler.");
+        log.info("Starting scheduler.");
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
 

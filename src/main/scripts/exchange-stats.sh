@@ -91,7 +91,9 @@ do_stop()
     --exec $JAVA \
     --retry=TERM/30/KILL/5
   RETVAL="$?"
-  [ "$RETVAL" = 2 ] && return 2
+  if [ "$RETVAL" = 2 ]; then
+    return 2
+  fi
   rm -f $PIDFILE
   return "$RETVAL"
 }
@@ -112,7 +114,9 @@ do_status()
 
 case "$1" in
   start)
-  [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+  if [ "$VERBOSE" != no ]; then
+    log_daemon_msg "Starting $DESC" "$NAME"
+  fi
   do_start
   case "$?" in
     0|1) 
@@ -129,7 +133,9 @@ case "$1" in
   ;;
   
   stop)
-  [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+  if [ "$VERBOSE" != no ]; then
+    log_daemon_msg "Stopping $DESC" "$NAME"
+  fi
   do_stop
   case "$?" in
     0|1) 

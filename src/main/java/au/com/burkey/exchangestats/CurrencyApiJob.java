@@ -39,7 +39,7 @@ public class CurrencyApiJob implements Runnable
         try
         {
             String accessKey = PropertyUtil.getProperties().getProperty("currency.accessKey");
-            String currencyFile = PropertyUtil.getProperties().getProperty("currency.file");
+            String currencyPath = PropertyUtil.getProperties().getProperty("currency.path");
 
             accessKey = Credential.getCredential(accessKey).toString();
 
@@ -101,7 +101,13 @@ public class CurrencyApiJob implements Runnable
 
             log.info("Exchange Rate list size: " + exchangeRateMap.size());
 
-            boolean append = new File(currencyFile).exists();
+            String currencyFilename = new SimpleDateFormat("'currency'-yyyy-MM.'csv'").format(timestamp);
+
+            File currencyFile = new File(currencyPath, currencyFilename);
+
+            currencyFile.getParentFile().mkdirs();
+
+            boolean append = currencyFile.exists();
             try (CSVWriter writer = new CSVWriter(new FileWriter(currencyFile, append)))
             {
                 if (append)

@@ -68,10 +68,10 @@
 
 *  Deploy
 ```
-    scp target/exchange-stats-1.0.0.jar pi@192.168.1.1:~/exchange-stats.jar
-    scp -r target/lib pi@192.168.1.1:~/lib
-    scp example-exchange-stats.properties pi@192.168.1.1:~/exchange-stats.properties
-    scp src/main/scripts/exchange-stats.sh pi@192.168.1.1:~
+    scp target/exchange-stats-1.0.0.jar pi@192.168.1.100:~/exchange-stats.jar
+    scp -r target/lib pi@192.168.1.100:~/lib
+    scp example-exchange-stats.properties pi@192.168.1.100:~/exchange-stats.properties
+    scp src/main/scripts/exchange-stats.sh pi@192.168.1.100:~
 ```
     
 ```

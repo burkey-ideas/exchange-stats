@@ -15,7 +15,7 @@
     touch /Volumes/boot/ssh
 ```
 
-*  Enable WiFi
+*  Enable WiFi (optional)
     *  https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
 ```
     sudo iwlist wlan0 scan
@@ -29,6 +29,26 @@
     
     wpa_cli -i wlan0 reconfigure
 ```
+
+*  Static IP (optional)
+    *  https://www.raspberrypi.org/learning/networking-lessons/rpi-static-ip-address/
+    *  https://wiki.archlinux.org/index.php/dhcpcd
+```
+    sudo vi /etc/dhcpcd.conf
+    
+    interface eth0
+    static ip_address=192.168.1.100/24
+    static routers=192.168.1.1
+    static domain_name_servers=192.168.1.1
+```
+
+*  Update and Upgrade
+    *  https://www.raspberrypi.org/documentation/raspbian/updating.md
+```
+    sudo apt-get update
+    sudo apt-get dist-upgrade
+```
+
 
 *  Install Oracle Java 8
 ```
@@ -52,8 +72,10 @@
     scp -r target/lib pi@192.168.1.1:~/lib
     scp example-exchange-stats.properties pi@192.168.1.1:~/exchange-stats.properties
     scp src/main/scripts/exchange-stats.sh pi@192.168.1.1:~
+```
     
-    sudo mv exchange-stats.sh /etc/init.d/exchange-stats.sh
+```
+    sudo mv ~/exchange-stats.sh /etc/init.d/exchange-stats.sh
     sudo chmod 755 /etc/init.d/exchange-stats.sh
 ```
 

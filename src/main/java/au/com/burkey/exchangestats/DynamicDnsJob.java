@@ -20,12 +20,16 @@ public class DynamicDnsJob implements Runnable
         log.info("Running: " + this.getClass().getSimpleName());
 
         final String ipifyApiUrl = "https://api.ipify.org?format=json";
-        final String dtdnsUrl = "https://www.dtdns.com/api/autodns.cfm?id=%s&pw=%s&ip=%s";
+        //final String dtdnsUrl = "https://www.dtdns.com/api/autodns.cfm?id=%s&pw=%s&ip=%s";
+        //final String freednsUrl = "https://%s:%s@freedns.afraid.org/nic/update?hostname=%s&myip=%s";
+        final String freednsKeyUrl = "https://freedns.afraid.org/dynamic/update.php?%s&address=%s";
 
         try
         {
             String hostname = PropertyUtil.getProperties().getProperty("dns.hostname");
+            String username = PropertyUtil.getProperties().getProperty("dns.username");
             String password = PropertyUtil.getProperties().getProperty("dns.password");
+            String apikey = PropertyUtil.getProperties().getProperty("dns.apikey");
 
             password = Credential.getCredential(password).toString();
 
@@ -43,8 +47,10 @@ public class DynamicDnsJob implements Runnable
             {
                 log.info("First day of month, forcing update to ensure service does not go stale.");
 
-                String dtdnsResult = UrlUtil.getTextUrl(dtdnsUrl, hostname, password, externalAddress.getHostAddress());
-                log.info(dtdnsResult);
+                //String dtdnsResult = UrlUtil.getTextUrl(dtdnsUrl, hostname, password, externalAddress.getHostAddress());
+                //String freednsResult = UrlUtil.getTextUrl(freednsUrl, username, password, hostname, externalAddress.getHostAddress());
+                String freednsResult = UrlUtil.getTextUrl(freednsKeyUrl, apikey, externalAddress.getHostAddress());
+                log.info(freednsResult);
             }
             else if (externalAddress.getHostAddress().equals(resolvedAddress.getHostAddress()))
             {
@@ -54,8 +60,10 @@ public class DynamicDnsJob implements Runnable
             {
                 log.info("Address has changed, attempting update.");
 
-                String dtdnsResult = UrlUtil.getTextUrl(dtdnsUrl, hostname, password, externalAddress.getHostAddress());
-                log.info(dtdnsResult);
+                //String dtdnsResult = UrlUtil.getTextUrl(dtdnsUrl, hostname, password, externalAddress.getHostAddress());
+                //String freednsResult = UrlUtil.getTextUrl(freednsUrl, username, password, hostname, externalAddress.getHostAddress());
+                String freednsResult = UrlUtil.getTextUrl(freednsKeyUrl, apikey, externalAddress.getHostAddress());
+                log.info(freednsResult);
             }
         }
         catch (WebException ex)

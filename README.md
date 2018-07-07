@@ -5,8 +5,10 @@
     *  https://www.raspberrypi.org/documentation/installation/installing-images/
 ```
     diskutil list
-    diskutil unmountDisk /dev/disk2
-    sudo dd bs=1m if=2017-11-29-raspbian-stretch-lite.img of=/dev/rdisk2 conv=sync
+    diskutil unmountDisk /dev/disk3
+    sudo dd bs=1m if=2018-06-27-raspbian-stretch-lite.img of=/dev/rdisk3 conv=sync
+    
+    sudo diskutil eject /dev/rdisk3
 ```
 
 *  Enable SSH

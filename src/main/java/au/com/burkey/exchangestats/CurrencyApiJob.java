@@ -146,8 +146,7 @@ public class CurrencyApiJob implements Runnable
         }
         catch (IOException ex)
         {
-            log.error("Unable to examine Currency. " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Unable to examine Currency. " + ex.getMessage(), ex);
         }
     }
 

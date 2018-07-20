@@ -74,8 +74,7 @@ public class DynamicDnsJob implements Runnable
         }
         catch (IOException ex)
         {
-            log.error("Unable to examine Address. " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Unable to examine Address. " + ex.getMessage(), ex);
         }
     }
 }

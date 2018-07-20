@@ -34,6 +34,11 @@ public class BackgroundJobManager implements ServletContextListener
         {
             scheduler.scheduleAtFixedRate(new DynamicDnsJob(), 0, 15, TimeUnit.MINUTES);
         }
+
+        if (Boolean.valueOf(PropertyUtil.getProperties().getProperty("letsencrypt.enabled")))
+        {
+            scheduler.scheduleAtFixedRate(new LetsEncryptJob(), 0, 1, TimeUnit.HOURS);
+        }
     }
 
     @Override

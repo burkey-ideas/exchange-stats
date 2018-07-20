@@ -10,3 +10,8 @@ build
 *.log
 currency.csv
 exchange-stats.properties
+
+user.key
+domain.key
+domain.csr
+domain-chain.crt

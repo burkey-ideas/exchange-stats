@@ -14,7 +14,7 @@ public class PropertyUtil
 
     private static final Logger log = LoggerFactory.getLogger(PropertyUtil.class);
 
-    public static synchronized Properties getProperties()
+    public static synchronized Properties get()
     {
         try
         {

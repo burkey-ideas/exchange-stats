@@ -38,8 +38,8 @@ public class CurrencyApiJob implements Runnable
 
         try
         {
-            String accessKey = PropertyUtil.getProperties().getProperty("currency.accessKey");
-            String currencyPath = PropertyUtil.getProperties().getProperty("currency.path");
+            String accessKey = PropertyUtil.get().getProperty("currency.accessKey");
+            String currencyPath = PropertyUtil.get().getProperty("currency.path");
 
             accessKey = Credential.getCredential(accessKey).toString();
 

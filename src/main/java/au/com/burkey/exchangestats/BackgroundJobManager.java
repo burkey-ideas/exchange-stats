@@ -25,17 +25,17 @@ public class BackgroundJobManager implements ServletContextListener
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        if (Boolean.valueOf(PropertyUtil.getProperties().getProperty("currency.enabled")))
+        if (Boolean.valueOf(PropertyUtil.get().getProperty("currency.enabled")))
         {
             scheduler.scheduleAtFixedRate(new CurrencyApiJob(), 0, 1, TimeUnit.HOURS);
         }
 
-        if (Boolean.valueOf(PropertyUtil.getProperties().getProperty("dns.enabled")))
+        if (Boolean.valueOf(PropertyUtil.get().getProperty("dns.enabled")))
         {
             scheduler.scheduleAtFixedRate(new DynamicDnsJob(), 0, 15, TimeUnit.MINUTES);
         }
 
-        if (Boolean.valueOf(PropertyUtil.getProperties().getProperty("letsencrypt.enabled")))
+        if (Boolean.valueOf(PropertyUtil.get().getProperty("letsencrypt.enabled")))
         {
             scheduler.scheduleAtFixedRate(new LetsEncryptJob(), 0, 1, TimeUnit.HOURS);
         }

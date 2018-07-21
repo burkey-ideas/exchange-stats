@@ -28,7 +28,7 @@ public class CurrencyBrowseServlet extends DefaultServlet
         {
             if ("resourceBase".equals(name))
             {
-                String currencyPath = PropertyUtil.getProperties().getProperty("currency.path");
+                String currencyPath = PropertyUtil.get().getProperty("currency.path");
 
                 Path resourcePath = new File(currencyPath).toPath().toRealPath();
 

@@ -26,10 +26,10 @@ public class DynamicDnsJob implements Runnable
 
         try
         {
-            String hostname = PropertyUtil.getProperties().getProperty("dns.hostname");
-            String username = PropertyUtil.getProperties().getProperty("dns.username");
-            String password = PropertyUtil.getProperties().getProperty("dns.password");
-            String apikey = PropertyUtil.getProperties().getProperty("dns.apikey");
+            String hostname = PropertyUtil.get().getProperty("dns.hostname");
+            String username = PropertyUtil.get().getProperty("dns.username");
+            String password = PropertyUtil.get().getProperty("dns.password");
+            String apikey = PropertyUtil.get().getProperty("dns.apikey");
 
             password = Credential.getCredential(password).toString();
 

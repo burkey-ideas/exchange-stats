@@ -39,7 +39,7 @@ public class LetsEncryptJob implements Runnable
 
             //javax.swing.JOptionPane.showConfirmDialog(null, "Question?", "Hello", javax.swing.JOptionPane.YES_NO_OPTION);
 
-            LetsEncryptUtil.ChallengeType challengeType = LetsEncryptUtil.ChallengeType.HTTP;
+            LetsEncryptUtil.ChallengeType challengeType = LetsEncryptUtil.ChallengeType.DNS;
 
             LetsEncryptUtil.fetchCertificate(sessionUrl, userKey, domainKey, domainCsr, domainCrt, challengeType, domains);
         }

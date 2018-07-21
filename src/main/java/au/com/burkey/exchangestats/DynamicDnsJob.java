@@ -3,6 +3,7 @@ package au.com.burkey.exchangestats;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Calendar;
+import java.util.Properties;
 
 import javax.json.JsonObject;
 
@@ -19,19 +20,19 @@ public class DynamicDnsJob implements Runnable
     {
         log.info("Running: " + this.getClass().getSimpleName());
 
-        final String ipifyApiUrl = "https://api.ipify.org?format=json";
-        //final String dtdnsUrl = "https://www.dtdns.com/api/autodns.cfm?id=%s&pw=%s&ip=%s";
-        //final String freednsUrl = "https://%s:%s@freedns.afraid.org/nic/update?hostname=%s&myip=%s";
-        final String freednsKeyUrl = "https://freedns.afraid.org/dynamic/update.php?%s&address=%s";
-
         try
         {
-            String hostname = PropertyUtil.get().getProperty("dns.hostname");
-            String username = PropertyUtil.get().getProperty("dns.username");
-            String password = PropertyUtil.get().getProperty("dns.password");
-            String apikey = PropertyUtil.get().getProperty("dns.apikey");
+            Properties props = PropertyUtil.get();
 
-            password = Credential.getCredential(password).toString();
+            String ipifyApiUrl = "https://api.ipify.org?format=json";
+
+            String dnsUrl = props.getProperty("dns.url");
+            String username = props.getProperty("dns.username");
+            String password = props.getProperty("dns.password");
+            String hostname = props.getProperty("dns.hostname");
+            String apiKey = props.getProperty("dns.apiKey");
+
+            password = password == null ? null : Credential.getCredential(password).toString();
 
             JsonObject ipifyResult = UrlUtil.getJsonUrl(ipifyApiUrl);
 
@@ -47,10 +48,8 @@ public class DynamicDnsJob implements Runnable
             {
                 log.info("First day of month, forcing update to ensure service does not go stale.");
 
-                //String dtdnsResult = UrlUtil.getTextUrl(dtdnsUrl, hostname, password, externalAddress.getHostAddress());
-                //String freednsResult = UrlUtil.getTextUrl(freednsUrl, username, password, hostname, externalAddress.getHostAddress());
-                String freednsResult = UrlUtil.getTextUrl(freednsKeyUrl, apikey, externalAddress.getHostAddress());
-                log.info(freednsResult);
+                String dnsResult = UrlUtil.getTextUrl(dnsUrl, username, password, hostname, apiKey, externalAddress.getHostAddress(), null, true, false);
+                log.info(dnsResult);
             }
             else if (externalAddress.getHostAddress().equals(resolvedAddress.getHostAddress()))
             {
@@ -60,10 +59,8 @@ public class DynamicDnsJob implements Runnable
             {
                 log.info("Address has changed, attempting update.");
 
-                //String dtdnsResult = UrlUtil.getTextUrl(dtdnsUrl, hostname, password, externalAddress.getHostAddress());
-                //String freednsResult = UrlUtil.getTextUrl(freednsUrl, username, password, hostname, externalAddress.getHostAddress());
-                String freednsResult = UrlUtil.getTextUrl(freednsKeyUrl, apikey, externalAddress.getHostAddress());
-                log.info(freednsResult);
+                String dnsResult = UrlUtil.getTextUrl(dnsUrl, username, password, hostname, apiKey, externalAddress.getHostAddress(), null, true, false);
+                log.info(dnsResult);
             }
         }
         catch (WebException ex)

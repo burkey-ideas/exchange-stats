@@ -20,10 +20,14 @@ public class UrlUtil
 {
     private static final Logger log = LoggerFactory.getLogger(UrlUtil.class);
 
-    public static JsonObject getJsonUrl(final String url, final Object... args) throws IOException
+    public static JsonObject getJsonUrl(final String formatUrl, final Object... args) throws IOException
     {
-        log.info("URL connection: " + url);
-        HttpURLConnection conn = (HttpURLConnection) new URL(String.format(url, args)).openConnection();
+        log.info("URL connection: " + formatUrl);
+
+        String url = String.format(formatUrl, args);
+        log.debug("URL connection: " + url);
+
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
 
         int responseCode = conn.getResponseCode();
 
@@ -50,11 +54,14 @@ public class UrlUtil
         }
     }
 
-    public static String getTextUrl(final String url, final Object... args) throws IOException
+    public static String getTextUrl(final String formatUrl, final Object... args) throws IOException
     {
-        log.info("URL connection: " + url);
+        log.info("URL connection: " + formatUrl);
 
-        HttpURLConnection conn = (HttpURLConnection) new URL(String.format(url, args)).openConnection();
+        String url = String.format(formatUrl, args);
+        log.debug("URL connection: " + url);
+
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
 
         int responseCode = conn.getResponseCode();
 

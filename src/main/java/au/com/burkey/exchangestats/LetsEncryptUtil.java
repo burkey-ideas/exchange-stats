@@ -64,7 +64,7 @@ public class LetsEncryptUtil
         final Collection<String> domains) throws IOException, AcmeException
     {
         // Load the user key file. If there is no key file, create a new one.
-        KeyPair userKeyPair = loadOrCreateUserKeyPair(userKey);
+        KeyPair userKeyPair = loadOrCreateKeyPair(userKey);
 
         // Create a session for Let's Encrypt.
         // Use "acme://letsencrypt.org" for production server
@@ -76,7 +76,7 @@ public class LetsEncryptUtil
         Account acct = findOrRegisterAccount(session, userKeyPair);
 
         // Load or create a key pair for the domains. This should not be the userKeyPair!
-        KeyPair domainKeyPair = loadOrCreateDomainKeyPair(domainKey);
+        KeyPair domainKeyPair = loadOrCreateKeyPair(domainKey);
 
         // Order the certificate
         Order order = acct.newOrder().domains(domains).create();
@@ -143,22 +143,22 @@ public class LetsEncryptUtil
     }
 
     /**
-     * Loads a user key pair from {@value #USER_KEY_FILE}. If the file does not exist,
+     * Loads a key pair from {@value #key}. If the file does not exist,
      * a new key pair is generated and saved.
      * <p>
      * Keep this key pair in a safe place! In a production environment, you will not be
      * able to access your account again if you should lose the key pair.
      *
-     * @return User's {@link KeyPair}.
+     * @return The {@link KeyPair}.
      */
-    private static KeyPair loadOrCreateUserKeyPair(final String userKey) throws IOException
+    private static KeyPair loadOrCreateKeyPair(final String key) throws IOException
     {
-        File userKeyFile = new File(userKey);
+        File keyFile = new File(key);
 
-        if (userKeyFile.exists())
+        if (keyFile.exists())
         {
             // If there is a key file, read it
-            try (FileReader fr = new FileReader(userKeyFile))
+            try (FileReader fr = new FileReader(keyFile))
             {
                 return KeyPairUtils.readKeyPair(fr);
             }
@@ -166,44 +166,14 @@ public class LetsEncryptUtil
         else
         {
             // If there is none, create a new key pair and save it
-            KeyPair userKeyPair = KeyPairUtils.createKeyPair(KEY_SIZE);
+            KeyPair keyPair = KeyPairUtils.createKeyPair(KEY_SIZE);
 
-            try (FileWriter fw = new FileWriter(userKeyFile))
+            try (FileWriter fw = new FileWriter(keyFile))
             {
-                KeyPairUtils.writeKeyPair(userKeyPair, fw);
+                KeyPairUtils.writeKeyPair(keyPair, fw);
             }
 
-            return userKeyPair;
-        }
-    }
-
-    /**
-     * Loads a domain key pair from {@value #DOMAIN_KEY_FILE}. If the file does not exist,
-     * a new key pair is generated and saved.
-     *
-     * @return Domain {@link KeyPair}.
-     */
-    private static KeyPair loadOrCreateDomainKeyPair(final String domainKey) throws IOException
-    {
-        File domainKeyFile = new File(domainKey);
-
-        if (domainKeyFile.exists())
-        {
-            try (FileReader fr = new FileReader(domainKeyFile))
-            {
-                return KeyPairUtils.readKeyPair(fr);
-            }
-        }
-        else
-        {
-            KeyPair domainKeyPair = KeyPairUtils.createKeyPair(KEY_SIZE);
-
-            try (FileWriter fw = new FileWriter(domainKeyFile))
-            {
-                KeyPairUtils.writeKeyPair(domainKeyPair, fw);
-            }
-
-            return domainKeyPair;
+            return keyPair;
         }
     }
 
@@ -240,6 +210,14 @@ public class LetsEncryptUtil
                         .create(session);
 
         log.info("Registered a new user, URL: " + account.getLocation());
+
+
+        // TODO https://shredzone.org/maven/acme4j/usage/account.html
+        String keyId = "TODO";
+
+        //Properties challenges = ChallengeUtil.get();
+        //challenges.setProperty(keyId, account.getLocation().toString());
+        //ChallengeUtil.persist(challenges);
 
         return account;
     }
@@ -318,6 +296,12 @@ public class LetsEncryptUtil
         {
             throw new AcmeException("Challenge failed, Domain " + auth.getDomain() + ", Status " + challenge.getStatus() + ", Error: " + challenge.getError());
         }
+
+        if (ChallengeType.DNS.equals(challengeType))
+        {
+            // Clear the DNS.
+            updateDns(auth, null);
+        }
     }
 
     /**
@@ -387,8 +371,10 @@ public class LetsEncryptUtil
         }
 
         Properties challenges = ChallengeUtil.get();
-        challenges.setProperty("_acme-challenge." + auth.getDomain() + ". IN TXT ", challenge.getDigest());
+        challenges.setProperty("_acme-challenge." + auth.getDomain(), challenge.getDigest());
         ChallengeUtil.persist(challenges);
+
+        updateDns(auth, challenge);
 
         // Output the challenge, wait for acknowledge...
         log.info("Please create a TXT record:");
@@ -401,6 +387,25 @@ public class LetsEncryptUtil
 //        acceptChallenge(message.toString());
 
         return challenge;
+    }
+
+    public static void updateDns(final Authorization auth, final Dns01Challenge challenge) throws AcmeException
+    {
+        Properties props = PropertyUtil.get();
+        String dnsUrl = props.getProperty("letsencrypt.dnsUrl");
+        String apiKey = props.getProperty("letsencrypt.dnsApiKey");
+
+        boolean clear = challenge == null;
+
+        try
+        {
+            String dnsResult = UrlUtil.getTextUrl(dnsUrl, null, null, auth.getDomain(), apiKey, null, clear ? null : challenge.getDigest(), true, clear);
+            log.info(dnsResult);
+        }
+        catch (IOException ex)
+        {
+            throw new AcmeException("Unable to update dns record " + auth.getDomain() + ".", ex);
+        }
     }
 
 //    /**

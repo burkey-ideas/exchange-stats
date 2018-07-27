@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -22,12 +24,73 @@ public class UrlUtil
 
     public static JsonObject getJsonUrl(final String formatUrl, final Object... args) throws IOException
     {
+        return getJsonUrl(null, null, formatUrl, args);
+    }
+
+    public static JsonObject getJsonUrl(final Map<String, String> headers, final Map<String, String> post, final String formatUrl, final Object... args) throws IOException
+    {
         log.info("URL connection: " + formatUrl);
 
         String url = String.format(formatUrl, args);
         log.debug("URL connection: " + url);
 
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+
+        conn.setUseCaches(false);
+
+        if (headers != null)
+        {
+            for (Map.Entry<String, String> header : headers.entrySet())
+            {
+                String key = header.getKey();
+                String value = header.getValue();
+
+                if ("Authorization".equalsIgnoreCase(key))
+                {
+                    String[] creds = String.format(value, args).split("[ ]");
+
+                    String auth;
+
+                    if ("Basic".equalsIgnoreCase(creds[0]))
+                    {
+                        auth = creds[0] + ' ' + new String(Base64.getEncoder().encode(creds[1].getBytes("UTF-8")));
+                    }
+                    else
+                    {
+                        auth = creds[0] + ' ' + creds[1];
+                    }
+
+                    conn.setRequestProperty(key, auth);
+                }
+                else
+                {
+                    conn.setRequestProperty(key, value);
+                }
+            }
+        }
+
+        if (post != null)
+        {
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+
+            StringBuilder data = new StringBuilder();
+
+            for (Map.Entry<String, String> param : post.entrySet())
+            {
+                if (data.length() > 0)
+                {
+                    data.append("&");
+                }
+
+                data.append(param.getKey()).append("=").append(param.getValue());
+            }
+
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+            writer.write(data.toString());
+        }
+
+        conn.connect();
 
         int responseCode = conn.getResponseCode();
 

@@ -3,6 +3,8 @@ package au.com.burkey.exchangestats;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -40,5 +42,26 @@ public class PropertyUtil
 
             return new Properties();
         }
+    }
+
+    public static Map<String, String> getSubProperties(final Properties props, final String prefix)
+    {
+        Map<String, String> sub = null;
+
+        for (Object obj : props.keySet())
+        {
+            String key = (String) obj;
+            if (key.startsWith(prefix))
+            {
+                if (sub == null)
+                {
+                    sub = new HashMap<String, String>();
+                }
+
+                sub.put(key, props.getProperty(key));
+            }
+        }
+
+        return sub;
     }
 }

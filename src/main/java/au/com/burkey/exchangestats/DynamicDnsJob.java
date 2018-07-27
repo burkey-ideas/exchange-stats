@@ -32,6 +32,10 @@ public class DynamicDnsJob implements Runnable
             String hostname = props.getProperty("dns.hostname");
             String apiKey = props.getProperty("dns.apiKey");
 
+            String dnsAuthUrl = props.getProperty("dns.authUrl");
+            String dnsRestUrl = props.getProperty("dns.restUrl");
+            String jsonAuth = props.getProperty("dns.jsonAuth");
+
             password = password == null ? null : Credential.getCredential(password).toString();
 
             JsonObject ipifyResult = UrlUtil.getJsonUrl(ipifyApiUrl);
@@ -59,8 +63,29 @@ public class DynamicDnsJob implements Runnable
             {
                 log.info("Address has changed, attempting update.");
 
-                String dnsResult = UrlUtil.getTextUrl(dnsUrl, username, password, hostname, apiKey, externalAddress.getHostAddress(), null, true, false);
-                log.info(dnsResult);
+                if (jsonAuth == null)
+                {
+                    String dnsResult = UrlUtil.getTextUrl(dnsUrl, username, password, hostname, apiKey, externalAddress.getHostAddress(), null, true, false);
+                    log.info(dnsResult);
+                }
+                else
+                {
+                    String tokenKey = props.getProperty(jsonAuth);
+
+                    JsonObject authResult = UrlUtil.getJsonUrl(
+                        PropertyUtil.getSubProperties(props, "dns.header.auth."),
+                        PropertyUtil.getSubProperties(props, "dns.post.auth."),
+                        dnsAuthUrl, username, password);
+
+                    String token = authResult.getString(tokenKey);
+
+                    JsonObject restResult = UrlUtil.getJsonUrl(
+                        PropertyUtil.getSubProperties(props, "dns.header.rest."),
+                        PropertyUtil.getSubProperties(props, "dns.post.rest."),
+                        dnsRestUrl, token);
+
+                    log.info(restResult.toString());
+                }
             }
         }
         catch (WebException ex)

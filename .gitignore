@@ -1,12 +1,17 @@
+# Xcode and Mac OS
+xcuserdata
+.DS_Store
+
+# Eclipse
 target
 bin
+build
 .metadata
+.settings
 .classpath
 .project
-.settings
-.DS_Store
-xcuserdata
-build
+
+# Log and Data
 *.log
 currency.csv
 exchange-stats.properties
